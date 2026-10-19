@@ -74,7 +74,59 @@ void MyWidget::on_pushButton_2_clicked()
 
 void MyWidget::on_pushButton_3_clicked()
 {
-    QString fileName;
-    fileName = QFileDialog::getSaveFileName(this, "匯出通訊錄", ".", "csv(*.csv);;txt(*.txt)");
+    QString fileName = QFileDialog::getOpenFileName(this, "匯入通訊錄", "", "CSV Files (*.csv);;Text Files (*.txt)");
+
+    // 沒東西
+    if (fileName.isEmpty()) {
+        return;
+    }
+
+    QFile file(fileName);
+
+    // 開啟檔案
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qDebug() << "Could not open file";
+        return;
+    }
+
+    QTextStream in(&file);
+
+    // 清除舊資料
+    ui->tableWidget->setRowCount(0);
+
+    // 一行一行讀取
+    while (!in.atEnd()) {
+        QString line = in.readLine();
+
+        // 跳過空白行
+        if (line.trimmed().isEmpty()) {
+            continue;
+        }
+
+        // 使用逗號分割
+        QStringList data = line.split(',');
+
+        // 確認有4個欄位
+        if (data.size() != 4) {
+            continue;
+        }
+
+        int row = ui->tableWidget->rowCount();
+
+        // 新增一列
+        ui->tableWidget->insertRow(row);
+
+        // 將資料放入表格
+        for (int col = 0; col < 4; col++) {
+            ui->tableWidget->setItem(
+                row,
+                col,
+                new QTableWidgetItem(data[col])
+                );
+        }
+    }
+
+    file.close();
+
 }
 
