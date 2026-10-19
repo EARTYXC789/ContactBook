@@ -59,15 +59,22 @@ void MyWidget::on_pushButton_2_clicked()
     QString fileName;
     QString saveFile="";
 
-    fileName = QFileDialog::getSaveFileName(this, "匯出通訊錄", ".", "csv(*.csv);;text(*txt)");
+    fileName = QFileDialog::getSaveFileName(this, "匯出通訊錄", ".", "csv(*.csv);;text(*.txt)");
 
     for (int i = 0; i < ui->tableWidget->rowCount(); i++) {
         for (int j = 0; j < ui->tableWidget->columnCount(); j++) {
-            saveFile += ui->tableWidget->item(i,j)->text() + ",";
+            saveFile += ui->tableWidget->item(i,j)->text() + (j != ui->tableWidget->columnCount()? "," : "");
         }
         saveFile += "\n";
     }
     Write(fileName,saveFile);
 
+}
+
+
+void MyWidget::on_pushButton_3_clicked()
+{
+    QString fileName;
+    fileName = QFileDialog::getSaveFileName(this, "匯出通訊錄", ".", "csv(*.csv);;txt(*.txt)");
 }
 

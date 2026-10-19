@@ -43,6 +43,7 @@ public:
     QSpacerItem *horizontalSpacer;
     QPushButton *pushButton;
     QPushButton *pushButton_2;
+    QPushButton *pushButton_3;
     QSpacerItem *horizontalSpacer_2;
 
     void setupUi(QWidget *MyWidget)
@@ -128,6 +129,11 @@ public:
 
         horizontalLayout_2->addWidget(pushButton_2);
 
+        pushButton_3 = new QPushButton(MyWidget);
+        pushButton_3->setObjectName("pushButton_3");
+
+        horizontalLayout_2->addWidget(pushButton_3);
+
         horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
 
         horizontalLayout_2->addItem(horizontalSpacer_2);
@@ -153,6 +159,7 @@ public:
         label_4->setText(QCoreApplication::translate("MyWidget", "\351\233\273\350\251\261\357\274\232", nullptr));
         pushButton->setText(QCoreApplication::translate("MyWidget", "\346\226\260\345\242\236", nullptr));
         pushButton_2->setText(QCoreApplication::translate("MyWidget", "\345\214\257\345\207\272", nullptr));
+        pushButton_3->setText(QCoreApplication::translate("MyWidget", "\345\214\257\345\205\245", nullptr));
     } // retranslateUi
 
 };
