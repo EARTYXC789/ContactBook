@@ -5,7 +5,6 @@
 #include <QDebug>
 #include <QFileDialog>
 
-QString file = "C:/Users/user/Downloads";
 
 void Write(QString File, QString str) {
     QFile mFile(File);
@@ -15,6 +14,7 @@ void Write(QString File, QString str) {
     }
 
     QTextStream out(&mFile);
+    out.setEncoding(QStringConverter::System);
 
     out << str;
     mFile.flush();
@@ -67,7 +67,7 @@ void MyWidget::on_pushButton_2_clicked()
         }
         saveFile += "\n";
     }
-    Write(file,saveFile);
+    Write(fileName,saveFile);
 
 }
 
