@@ -9,12 +9,12 @@
 void Write(QString File, QString str) {
     QFile mFile(File);
     if(!mFile.open(QFile::WriteOnly | QFile::Text)) {
-        qDebug() << "Could not open file for write";
+        qDebug() << "開不了";
         return;
     }
 
     QTextStream out(&mFile);
-    out.setEncoding(QStringConverter::System);
+    out.setEncoding(QStringConverter::System); //使用當前系統編碼
 
     out << str;
     mFile.flush();
@@ -28,8 +28,8 @@ MyWidget::MyWidget(QWidget *parent)
     ui->setupUi(this);
     ui->tableWidget->setColumnCount(4);
     QStringList ColTitle;
-    ColTitle << "學號" << "班級" << "姓名" << "電話";
-    ui->tableWidget->setHorizontalHeaderLabels(ColTitle);
+    ColTitle << "學號" << "班級" << "姓名" << "電話"; //行標題設置
+    ui->tableWidget->setHorizontalHeaderLabels(ColTitle); //水平標頭文字設置
 }
 
 MyWidget::~MyWidget()
@@ -44,10 +44,10 @@ void MyWidget::on_pushButton_clicked()
     inCol2 = new QTableWidgetItem(QString(ui->lineEdit_2->text()));
     inCol3 = new QTableWidgetItem(QString(ui->lineEdit_3->text()));
     inCol4 = new QTableWidgetItem(QString(ui->lineEdit_4->text()));
-    ui->tableWidget->insertRow(ui->tableWidget->rowCount());
+    ui->tableWidget->insertRow(ui->tableWidget->rowCount()); //新增一列(insertRow(row(index))
 
-    ui->tableWidget->setItem(ui->tableWidget->rowCount() - 1, 0, inCol1);
-    ui->tableWidget->setItem(ui->tableWidget->rowCount() - 1, 1, inCol2);
+    ui->tableWidget->setItem(ui->tableWidget->rowCount() - 1, 0, inCol1); //因為每次都是取Row當前數量，所以每次都得-1
+    ui->tableWidget->setItem(ui->tableWidget->rowCount() - 1, 1, inCol2); //setItem(row(index),col(index),QString value)
     ui->tableWidget->setItem(ui->tableWidget->rowCount() - 1, 2, inCol3);
     ui->tableWidget->setItem(ui->tableWidget->rowCount() - 1, 3, inCol4);
 
@@ -89,19 +89,15 @@ void MyWidget::on_pushButton_2_clicked()
 
 void MyWidget::on_pushButton_3_clicked()
 {
-    QString fileName = QFileDialog::getOpenFileName(this, "匯入通訊錄", "", "CSV Files (*.csv);;Text Files (*.txt)");
-
-    // 沒東西
+    QString fileName = QFileDialog::getOpenFileName(this, "匯入通訊錄", "", "csv(*.csv);;text(*.txt)");
     if (fileName.isEmpty()) {
         qDebug() << "空的" ;
         return;
     }
 
     QFile file(fileName);
-
-    // 開啟檔案
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qDebug() << "Could not open file";
+        qDebug() << "開不了";
         return;
     }
 
@@ -116,12 +112,10 @@ void MyWidget::on_pushButton_3_clicked()
     while (!in.atEnd()) {
         QString line = in.readLine();
 
-        // 跳過空白行
         if (line.trimmed().isEmpty()) {
             continue;
         }
 
-        // 使用逗號分割
         QStringList data = line.split(',');
 
         // 確認有4個欄位
@@ -131,16 +125,12 @@ void MyWidget::on_pushButton_3_clicked()
 
         int row = ui->tableWidget->rowCount();
 
-        // 新增一列
+
         ui->tableWidget->insertRow(row);
 
         // 將資料放入表格
         for (int col = 0; col < 4; col++) {
-            ui->tableWidget->setItem(
-                row,
-                col,
-                new QTableWidgetItem(data[col])
-                );
+            ui->tableWidget->setItem(row,col,new QTableWidgetItem(data[col]));
         }
     }
 
