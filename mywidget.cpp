@@ -1,4 +1,4 @@
-#include "mywidget.h"
+﻿#include "mywidget.h"
 #include "ui_mywidget.h"
 
 #include <QFile>
@@ -51,6 +51,8 @@ void MyWidget::on_pushButton_clicked()
     ui->tableWidget->setItem(ui->tableWidget->rowCount() - 1, 2, inCol3);
     ui->tableWidget->setItem(ui->tableWidget->rowCount() - 1, 3, inCol4);
 
+    //rowCount取得當前列數
+
 }
 
 
@@ -61,9 +63,22 @@ void MyWidget::on_pushButton_2_clicked()
 
     fileName = QFileDialog::getSaveFileName(this, "匯出通訊錄", ".", "csv(*.csv);;text(*.txt)");
 
+    if (fileName.isEmpty()) {
+        qDebug() << "空的" ;
+        return;
+    }
+
     for (int i = 0; i < ui->tableWidget->rowCount(); i++) {
         for (int j = 0; j < ui->tableWidget->columnCount(); j++) {
-            saveFile += ui->tableWidget->item(i,j)->text() + (j != ui->tableWidget->columnCount()? "," : "");
+
+            QTableWidgetItem *item = ui->tableWidget->item(i, j);
+            if (item != nullptr) {
+                saveFile += item->text();
+            }
+
+            if (j != ui->tableWidget->columnCount() - 1) {
+                saveFile += ",";
+            }
         }
         saveFile += "\n";
     }
@@ -78,6 +93,7 @@ void MyWidget::on_pushButton_3_clicked()
 
     // 沒東西
     if (fileName.isEmpty()) {
+        qDebug() << "空的" ;
         return;
     }
 
@@ -90,6 +106,8 @@ void MyWidget::on_pushButton_3_clicked()
     }
 
     QTextStream in(&file);
+    in.setEncoding(QStringConverter::System);
+
 
     // 清除舊資料
     ui->tableWidget->setRowCount(0);
